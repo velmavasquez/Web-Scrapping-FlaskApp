@@ -18,7 +18,7 @@ def home():
 
     # Find one record of data from the mongo database
     destination_data = mongo.db.collection.find_one()
-
+    print("destination_data " + str(destination_data))
     # Return template and data
     return render_template("index.html", mars_info=destination_data)
 
@@ -29,7 +29,7 @@ def scrape():
 
     # Run the scrape function
     scrape_data = scrape_mars.scrape()
-    # print(scrape_data)
+    print(scrape_data)
 
     # Update the Mongo database using update and upsert=True
     mongo.db.collection.replace_one({}, scrape_data, upsert=True)
