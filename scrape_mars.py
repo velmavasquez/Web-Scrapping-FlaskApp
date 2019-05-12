@@ -96,49 +96,53 @@ def scrape():
 
     # -----Mars Hemispheres----
     # set and visit url
-    # url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
-    # browser.visit(url)
+    url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    browser.visit(url)
 
-    # time.sleep(1)
+    time.sleep(1)
 
-    # # Scrape page into Soup
-    # html = browser.html
-    # soup = BeautifulSoup(html, "html.parser")
+    # Scrape page into Soup
+    html = browser.html
+    soup = BeautifulSoup(html, "html.parser")
 
-    # # Collect Nasa latest News Title with corresponding Paragraph Text
-    # items = soup.find_all("div", class_="item")
+    # Collect Website 1 urls
+    items = soup.find_all("div", class_="item")
 
-    # hemisphere_image_urls = []
+    hemi_imgs = []
 
     # astropedia_url = "https://astrogeology.usgs.gov"
 
-    # for item in items:
+    for item in items:
+        try:
+            title = item.find("div", class_="description")
+            hemi_title = title.a.text
 
-    #     hemi_title = item.find("h3").text
+            browser.click_link_by_partial_text(hemi_title)
+            html2 = browser.html
+            soup_2 = BeautifulSoup(html2, "html.parser")
 
-    #     hemi_link = item.find("a", class_="itemLink product-item")["href"]
+            hemi_link = soup_2.find("div", class_="downloads").find("li").a["href"]
+            hemi_title = soup_2.find("h2", class_="title").text
 
-    #     browser.visit(astropedia_url + hemi_link)
+            # Store data in a dictionary
+            data = {"img_url": hemi_link, "title": hemi_title}
 
-    #     html2 = browser.html
+            hemi_imgs.append(data)
 
-    #     soup = BeautifulSoup(html2, "html.parser")
+            browser.visit(url)
 
-    #     img_url = hemi_link + soup.find("img", class_="wide-image")["src"]
+        except AttributeError as e:
+            print("Error:", e)
+    print(hemi_imgs)
 
-    #     # Store data in a dictionary
+    browser.quit()
 
-    #     data = {"title": hemi_title, "img_url": img_url}
-
-    #     hemisphere_image_urls.append(data)
-
-    # browser.quit()
     # ------Dictionary to be imported to Mongo and website------
     scrape_data = {
         "news": mars_news,
         "featured_img": featured_img_url,
         "mars_weather": tweet_weather,
         "mars_table": html_table,
+        "hemi_imgs": hemi_imgs
     }
-
     return scrape_data

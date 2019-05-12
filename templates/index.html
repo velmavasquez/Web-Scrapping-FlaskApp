@@ -28,11 +28,10 @@
         <br>
 
         <div class="container">
-            <div class="row">
-                <!-- Left Image-->
+            <h2 class="text-center text-lg-left mt-4 mb-0">Featured Mars Image</h2>
+            <hr class="mt-2 mb-5">
+            <div class="row text-center text-lg-left">
                 <div class="col-lg-8 col-md-8 col-sm-12">
-                    <h2>Featured Mars Image</h2>
-                    <hr>
                     <img src="{{mars_info.featured_img}}" style="max-width:100%; max-height: auto;"
                         alt="Mars Featured Image">
                 </div>
@@ -45,18 +44,37 @@
                     <div>
                         <h5 class="text-center text-lg-left"><b>Mars Facts</b></h5>
                         {{mars_info.mars_table|safe}}
-
                     </div>
+
                 </div>
-                <br>
-                <br>
 
             </div>
-
-
         </div>
-        
+
+        <div class='container'>
+            <h2 class="text-center text-lg-left mt-4 mb-0">Mars Hemispheres</h2>
+            <hr class="mt-2 mb-5">
+
+            <div class="card-deck">
+
+                <div class="col-md-12">
+                    <div class="row">
+                        {% for img in mars_info.hemi_imgs %}
+                        <div class="col-md-6">
+                            <div class="card text-white bg-dark" style="margin: 30px;">
+                                <img class="card-img-top" src="{{ img.img_url }}" />
+                                <div class="card-body">
+                                    <p class="card-text">{{ img.title }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 
 
 </body>
